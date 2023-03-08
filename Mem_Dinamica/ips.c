@@ -22,7 +22,7 @@ MES leeFichero(char *nombreFichero){
     assert(fichero != NULL && "Error al abrir fichero");
 
     MES mes;
-    
+    //fscanf(fichero, "%s%*s%s",,)
     int scan = fscanf(fichero, " IP_MES: %s N: %hd", mes.mesIp, &mes.numDisp);
     mes.devices = (Dispositivo*)malloc(mes.numDisp * sizeof(Dispositivo));
 
