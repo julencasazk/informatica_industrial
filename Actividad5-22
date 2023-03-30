@@ -1,0 +1,100 @@
+// Ejercicio5-22.cpp : Este archivo contiene la función "main". La ejecución del programa comienza y termina ahí.
+//
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <Windows.h>
+
+char* recibePedido(int* cantidad, double* datosPropios);
+void ponEnMarchaPedido(char* nombre, int cantidad, double *datosPropios, int dia, int ano, int hora, int minutos, int segundos, long tiempoPreparacion);
+void pedidoPerdido(void);
+
+typedef struct dato {
+	int dia;
+	int mes;
+	int ano;
+	int horas;
+	int minutos;
+	int segundos;
+	char* cadena;
+	double t_Transcurrido;
+	int numDatos;
+	double* datos;
+
+} PEDIDO;
+
+
+int main()
+{
+	int iDatos = 0;
+	int iSacar = 0;
+	PEDIDO colaDatos[5];
+	clock_t ultimoServicio = 0;
+	clock_t diferencia = 0;
+	
+
+	while (!_kbhit()) {
+
+		clock_t previo = clock();
+		
+		PEDIDO pedidoActual;
+
+		int cantidadDatos = 0;
+		double datosActual[100];
+		char* cadenaActual;
+
+		if ((cadenaActual = recibePedido(&cantidadDatos, datosActual)) != NULL)
+		{
+
+			pedidoActual.datos = (double*)malloc(cantidadDatos * sizeof(double));
+			memcpy(pedidoActual.datos, datosActual, cantidadDatos * sizeof(double));
+			pedidoActual.cadena = malloc(sizeof(char) * strlen(cadenaActual));
+			strcpy(pedidoActual.cadena, cadenaActual);
+
+			pedidoActual.numDatos = cantidadDatos;
+
+			time_t tempus;
+			struct tm *tiempo;
+			time(&tempus);
+			tiempo = localtime(&tempus);
+
+			pedidoActual.ano = tiempo->tm_year;
+			pedidoActual.dia = tiempo->tm_mday;
+			pedidoActual.mes = tiempo->tm_mon;
+			pedidoActual.horas = tiempo->tm_hour;
+			pedidoActual.minutos = tiempo->tm_min;
+			pedidoActual.segundos = tiempo->tm_sec;
+
+			colaDatos[iDatos] = pedidoActual;
+			if (++iDatos > 5) {
+				iDatos = 0;
+			}
+
+
+		}
+
+		
+
+
+		clock_t despues = clock();
+
+		Sleep(300 - (despues - previo));
+
+
+
+	}
+
+
+
+}
+
+// Ejecutar programa: Ctrl + F5 o menú Depurar > Iniciar sin depurar
+// Depurar programa: F5 o menú Depurar > Iniciar depuración
+
+// Sugerencias para primeros pasos: 1. Use la ventana del Explorador de soluciones para agregar y administrar archivos
+//   2. Use la ventana de Team Explorer para conectar con el control de código fuente
+//   3. Use la ventana de salida para ver la salida de compilación y otros mensajes
+//   4. Use la ventana Lista de errores para ver los errores
+//   5. Vaya a Proyecto > Agregar nuevo elemento para crear nuevos archivos de código, o a Proyecto > Agregar elemento existente para agregar archivos de código existentes al proyecto
+//   6. En el futuro, para volver a abrir este proyecto, vaya a Archivo > Abrir > Proyecto y seleccione el archivo .sln
